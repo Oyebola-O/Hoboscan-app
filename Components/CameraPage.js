@@ -1,10 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import {Camera} from 'expo-camera';
-import {Container, Content, Header, Item, Icon, Input, Button} from 'native-base';
+import {Header, Icon} from 'native-base';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 
 const CameraPage = ({changePage}) => {
+    const camera = useRef();
 
+    // Image Picker
+    const [image, setImage] = useState(null);
+    const [hasRollPerm, setHasRollPerm] = useState(null);
+    useEffect(() => {
+        (async () => {
+            const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            setHasRollPerm(status === 'granted');
+        })();
+    }, []);
+
+    const pickImage = async () => {
+        try {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+          });
+          if (!result.cancelled) {
+            setImage(result.uri);
+          }
+          console.log(result);
+        } catch (E) {
+          console.log(E);
+        }
+    };
+
+
+
+    // Camera
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -17,16 +50,31 @@ const CameraPage = ({changePage}) => {
         })();
     }, []);
 
-    if(hasPermission == null){ return <View /> }
+    const takePicture = async () => {
+        try {
+            let camPic = await camera.current.takePictureAsync();
+            setImage(camPic);
+            console.log(camPic)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    if(hasPermission == null){ return <View /> }
     if(hasPermission == false){ return <Text> Sorry, no camera access </Text> }
+    if(hasRollPerm == null){ return <View /> }
+    if(hasRollPerm == false){ return <Text> Sorry, no camera roll access </Text> }
+
 
     return (
         <View style={{flex: 1}}>
-            <Camera style={{flex: 1,  justifyContent:'space-between'}} type={type}>
+            <Camera ref={camera}
+            style={{flex: 1,  justifyContent:'space-between'}} type={type}>
                 <Header style={styles.header}>
                     <View style={{flexDirection:'row', flex:1, justifyContent:'center'}}>
-                        <Icon type='FontAwesome' name='photo' style={{color:'white', fontSize: 25}}/>
+                        <Icon
+                        onPress={() => pickImage()}
+                        type='FontAwesome' name='photo' style={{color:'white', fontSize: 25}}/>
                     </View>
 
                     <View style={{flexDirection:'row', flex:4, justifyContent:'center'}}>
@@ -57,7 +105,9 @@ const CameraPage = ({changePage}) => {
                     onPress={()=> changePage(0)}
                     type='Foundation' name='page-edit' style={{color:'white'}}/>
                     <View>
-                        <Icon type='Entypo' name='circle' style={{color:'white', fontSize: 80, paddingBottom:10}}></Icon>
+                        <Icon
+                        onPress={()=> takePicture()}
+                        type='Entypo' name='circle' style={{color:'white', fontSize: 80, paddingBottom:10}}></Icon>
                     </View>
                     <Icon 
                     onPress={()=> changePage(2)}
