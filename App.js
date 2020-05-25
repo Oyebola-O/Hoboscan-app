@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {Container, Content} from 'native-base';
 import Swiper from 'react-native-swiper';
 import CameraPage from './Components/CameraPage';
 
 const App = () => {
+
+  const swiper = useRef(null)
+  const changePage = (indx) => {
+    swiper.current.scrollTo(indx);
+  }
+
   return (
     <Container>
       <Content>
         <Swiper
+        ref={swiper}
         loop = {false}
         showsPagination = {false}
         index = {1}
@@ -18,7 +25,7 @@ const App = () => {
           </View>
 
           <View style = {{flex:1}}>
-              <CameraPage />
+              <CameraPage changePage = {changePage}/>
           </View>
 
           <View style = {styles.slideDefault}>
