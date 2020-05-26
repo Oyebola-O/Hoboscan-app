@@ -6,13 +6,11 @@ import Main from './Components/Main';
 import Picture from './Components/Picture';
 
 const Stack = createStackNavigator();
-// const Transition = (index, position) => {
+/*
+https://hoboscan.cognitiveservices.azure.com/
+ae7268df79344ec79e8b7da75921c54b
 
-// }
-
-// const NavigationConfig = () => {
-
-// }
+*/
 
 const App = () => {
   return (

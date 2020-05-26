@@ -3,12 +3,12 @@ import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { Header, Icon } from 'native-base';
 
 const Picture = ({ route, navigation }) => {
-    let img = route.params.image.uri;
+    let img = route.params.image;
     console.log(img)
     return (
         <ImageBackground
-        source = {{uri: img}}
-        style = {styles.image}
+        source = {{uri: img.uri}}
+        style = {{flex: 1, width: '100%', height: '100%' }}
         >
             <Header style={styles.header}>
                 <Icon 
@@ -21,12 +21,6 @@ const Picture = ({ route, navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    image: {
-        flex: 1,
-        width: '100%',
-        height: '100%'
-    },
-
     header: {
         position: 'absolute',
         backgroundColor: 'transparent',
