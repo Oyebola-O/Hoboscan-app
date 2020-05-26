@@ -5,7 +5,7 @@ import {Header, Icon} from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CameraPage = ({changePage}) => {
+const CameraPage = ({changePage, navigation}) => {
     // ############ Image Picker #################
     const [image, setImage] = useState(null);
     const [hasRollPerm, setHasRollPerm] = useState(null);
@@ -24,8 +24,10 @@ const CameraPage = ({changePage}) => {
             aspect: [4, 3],
             quality: 1,
           });
-          if (!result.cancelled) { setImage(result.uri)}
-          console.log(result);
+          if (!result.cancelled) { 
+              setImage(result)
+              usePicture()
+            }
         } catch (E) {
           console.log(E);
         }
@@ -51,7 +53,7 @@ const CameraPage = ({changePage}) => {
         try {
             let camPic = await camera.current.takePictureAsync();
             setImage(camPic);
-            console.log(camPic)
+            usePicture()
         } catch (error) {
             console.log(error);
         }
@@ -63,8 +65,8 @@ const CameraPage = ({changePage}) => {
     if(hasRollPerm == null){ return <View /> }
     if(hasRollPerm == false){ return <Text> Sorry, no camera roll access </Text> }
 
-    const renderPicture = () => {
-        return <View></View>
+    const usePicture = () => {
+        navigation.navigate('Picture', {image});
     }
 
 

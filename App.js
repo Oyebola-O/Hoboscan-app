@@ -1,56 +1,27 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {Container, Content} from 'native-base';
-import Swiper from 'react-native-swiper';
-import CameraPage from './Components/CameraPage';
+import React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Main from './Components/Main';
+import Picture from './Components/Picture';
+
+const Stack = createStackNavigator();
 
 const App = () => {
-
-  const swiper = useRef(null)
-  const changePage = (indx) => {
-    swiper.current.scrollTo(indx);
-  }
-
   return (
-    <Container>
-      <Content>
-        <Swiper
-        ref={swiper}
-        loop = {false}
-        showsPagination = {false}
-        index = {1}
-        >
-          <View style = {styles.slideDefault}>
-            <Text style = {styles.text}>Rendered</Text>
-          </View>
-
-          <View style = {{flex:1}}>
-              <CameraPage changePage = {changePage}/>
-          </View>
-
-          <View style = {styles.slideDefault}>
-            <Text style = {styles.text}>Saved</Text>
-          </View>
-        </Swiper>
-      </Content>
-    </Container>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+        name="Main" 
+        component={Main}
+        options={{
+          headerShown: false
+        }}
+        />
+        <Stack.Screen name="Picture" component={Picture}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  slideDefault: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9dd6eb'
-  },
-
-  text: {
-    color: 'white',
-    fontSize: 30,
-    fontWeight: 'bold'
-  }
-});
-
 
 export default App;
