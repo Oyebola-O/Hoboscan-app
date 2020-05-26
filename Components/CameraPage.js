@@ -1,35 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import {Camera} from 'expo-camera';
-import {Header, Icon} from 'native-base';
+import { Camera } from 'expo-camera';
+import { Header, Icon } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CameraPage = ({changePage, navigation}) => {
+const CameraPage = ({ changePage, navigation }) => {
     // ############ Image Picker #################
-    const [image, setImage] = useState(null);
     const [hasRollPerm, setHasRollPerm] = useState(null);
     useEffect(() => {
         (async () => {
-            const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             setHasRollPerm(status === 'granted');
         })();
     }, []);
 
     const pickImage = async () => {
         try {
-          let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-          });
-          if (!result.cancelled) { 
-              setImage(result)
-              usePicture()
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                //console.log('Result', result)
+                //setImage(result)
+                usePicture(result)
             }
         } catch (E) {
-          console.log(E);
+            console.log(E);
         }
     };
 
@@ -44,7 +44,7 @@ const CameraPage = ({changePage, navigation}) => {
 
     useEffect(() => {
         (async () => {
-            const {status} = await Camera.requestPermissionsAsync();
+            const { status } = await Camera.requestPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
     }, []);
@@ -52,69 +52,68 @@ const CameraPage = ({changePage, navigation}) => {
     const takePicture = async () => {
         try {
             let camPic = await camera.current.takePictureAsync();
-            setImage(camPic);
-            usePicture()
+            usePicture(camPic)
         } catch (error) {
             console.log(error);
         }
     }
 
     // Calling Views
-    if(hasPermission == null){ return <View /> }
-    if(hasPermission == false){ return <Text> Sorry, no camera access </Text> }
-    if(hasRollPerm == null){ return <View /> }
-    if(hasRollPerm == false){ return <Text> Sorry, no camera roll access </Text> }
+    if (hasPermission == null) { return <View /> }
+    if (hasPermission == false) { return <Text> Sorry, no camera access </Text> }
+    if (hasRollPerm == null) { return <View /> }
+    if (hasRollPerm == false) { return <Text> Sorry, no camera roll access </Text> }
 
-    const usePicture = () => {
-        navigation.navigate('Picture', {image});
+    const usePicture = (image) => {
+        navigation.navigate('Picture', { image });
     }
 
 
     return (
-        <View style={{flex: 1}}>
-            <Camera ref={camera} style={{flex: 1,  justifyContent:'space-between'}} type={type}>
+        <View style={{ flex: 1 }}>
+            <Camera ref={camera} style={{ flex: 1, justifyContent: 'space-between' }} type={type}>
                 <Header style={styles.header}>
-                    <View style={{flexDirection:'row', flex:1, justifyContent:'center'}}>
-                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{color:'white', fontSize: 25}}/>
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
+                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
                     </View>
 
-                    <View style={{flexDirection:'row', flex:4, justifyContent:'center'}}>
-                        <Text style={{color:'white', fontSize:20}}>HÖBO SCAN</Text>
+                    <View style={{ flexDirection: 'row', flex: 4, justifyContent: 'center' }}>
+                        <Text style={{ color: 'white', fontSize: 20 }}>HÖBO SCAN</Text>
                     </View>
 
-                    <View style={{flexDirection:'row', flex:1, justifyContent:'space-around'}}>
-                        <Icon 
-                        onPress={() => {
-                            if(flash == Camera.Constants.FlashMode.off){
-                                setFlash(Camera.Constants.FlashMode.on);
-                                setFlashIcon('ios-flash');
-                            } else {
-                                setFlash(Camera.Constants.FlashMode.off);
-                                setFlashIcon('ios-flash-off');
-                            }
-                        }}
-                        name={flashIcon} style={{color:'white'}}/>
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
                         <Icon
-                        onPress={()=> {
-                            setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)
-                        }}
-                        name='ios-reverse-camera' style={{color:'white'}}/>
+                            onPress={() => {
+                                if (flash == Camera.Constants.FlashMode.off) {
+                                    setFlash(Camera.Constants.FlashMode.on);
+                                    setFlashIcon('ios-flash');
+                                } else {
+                                    setFlash(Camera.Constants.FlashMode.off);
+                                    setFlashIcon('ios-flash-off');
+                                }
+                            }}
+                            name={flashIcon} style={{ color: 'white' }} />
+                        <Icon
+                            onPress={() => {
+                                setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)
+                            }}
+                            name='ios-reverse-camera' style={{ color: 'white' }} />
                     </View>
                 </Header>
 
 
                 <View style={styles.footer}>
                     <Icon
-                    onPress={()=> changePage(0)}
-                    type='Foundation' name='page-edit' style={{color:'white'}}/>
+                        onPress={() => changePage(0)}
+                        type='Foundation' name='page-edit' style={{ color: 'white' }} />
                     <View>
                         <Icon
-                        onPress={()=> takePicture()}
-                        type='Entypo' name='circle' style={{color:'white', fontSize: 80, paddingBottom:10}}></Icon>
+                            onPress={() => takePicture()}
+                            type='Entypo' name='circle' style={{ color: 'white', fontSize: 80, paddingBottom: 10 }}></Icon>
                     </View>
-                    <Icon 
-                    onPress={()=> changePage(2)}
-                    type='MaterialIcons' name='storage' style={{color:'white'}}/>
+                    <Icon
+                        onPress={() => changePage(2)}
+                        type='MaterialIcons' name='storage' style={{ color: 'white' }} />
                 </View>
             </Camera>
         </View>
@@ -132,10 +131,10 @@ const styles = StyleSheet.create({
     },
 
     footer: {
-        flexDirection:'row',
-        justifyContent:'space-between',
-        paddingHorizontal:20,
-        marginBottom:88,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        marginBottom: 88,
         alignItems: "flex-end"
     }
 });

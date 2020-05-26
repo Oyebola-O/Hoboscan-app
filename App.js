@@ -6,19 +6,32 @@ import Main from './Components/Main';
 import Picture from './Components/Picture';
 
 const Stack = createStackNavigator();
+// const Transition = (index, position) => {
+
+// }
+
+// const NavigationConfig = () => {
+
+// }
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{
+            headerShown: false
+          }}
+        />
         <Stack.Screen 
-        name="Main" 
-        component={Main}
+        name="Picture" 
+        component={Picture} 
         options={{
           headerShown: false
         }}
         />
-        <Stack.Screen name="Picture" component={Picture}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
