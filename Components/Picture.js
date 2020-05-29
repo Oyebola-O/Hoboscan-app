@@ -4,7 +4,7 @@ import { Header, Icon } from 'native-base';
 
 const Picture = ({ route, navigation }) => {
     let img = route.params.image;
-    console.log(img)
+    console.log(img.uri)
     return (
         <ImageBackground
         source = {{uri: img.uri}}

@@ -21,11 +21,10 @@ const CameraPage = ({ changePage, navigation }) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
+                base64: true,
                 quality: 1,
             });
             if (!result.cancelled) {
-                //console.log('Result', result)
-                //setImage(result)
                 usePicture(result)
             }
         } catch (E) {
@@ -51,7 +50,7 @@ const CameraPage = ({ changePage, navigation }) => {
 
     const takePicture = async () => {
         try {
-            let camPic = await camera.current.takePictureAsync();
+            let camPic = await camera.current.takePictureAsync({base64: true});
             usePicture(camPic)
         } catch (error) {
             console.log(error);
