@@ -77,7 +77,7 @@ const CameraPage = ({ changePage, navigation }) => {
                     </View>
 
                     <View style={{ flexDirection: 'row', flex: 4, justifyContent: 'center' }}>
-                        <Text style={{ color: 'white', fontSize: 20 }}>HÖBO SCAN</Text>
+                        <Text style={{ color: 'white', fontSize: 20 }}>HÖBOscan</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
