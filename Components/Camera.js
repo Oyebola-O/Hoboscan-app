@@ -71,7 +71,8 @@ const CameraPage = ({ changePage, navigation }) => {
         <View style={{ flex: 1 }}>
             <Camera ref={camera} style={{ flex: 1, justifyContent: 'space-between' }} type={type}>
                 <Header style={styles.header}>
-                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
+                        <Icon onPress={() => navigation.navigate('Edit')} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
                         <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
                     </View>
 
@@ -101,17 +102,11 @@ const CameraPage = ({ changePage, navigation }) => {
 
 
                 <View style={styles.footer}>
-                    <Icon
-                        onPress={() => changePage(0)}
-                        type='Foundation' name='page-edit' style={{ color: 'white' }} />
                     <View>
                         <Icon
                             onPress={() => takePicture()}
                             type='Entypo' name='circle' style={{ color: 'white', fontSize: 80, paddingBottom: 10 }}></Icon>
                     </View>
-                    <Icon
-                        onPress={() => changePage(2)}
-                        type='MaterialIcons' name='storage' style={{ color: 'white' }} />
                 </View>
             </Camera>
         </View>
@@ -123,16 +118,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: 'transparent',
         left: 0,
-        top: 0,
+        top: 30,
         right: 0,
         zIndex: 100
     },
 
     footer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 20,
-        marginBottom: 88,
+        marginBottom: 30,
         alignItems: "flex-end"
     }
 });

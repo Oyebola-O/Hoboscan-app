@@ -2,15 +2,17 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Container, Content } from 'native-base';
 import Swiper from 'react-native-swiper';
-import CameraPage from './CameraPage';
+import CameraPage from './Components/Camera';
+import EditPage from './Components/Edit';
 
 
-const Main = ({ navigation }) => {
+const Main = ({ route, navigation }) => {
 
     const swiper = useRef(null)
     const changePage = (indx) => {
         swiper.current.scrollTo(indx);
     }
+
 
     return (
         <Container>
@@ -22,7 +24,7 @@ const Main = ({ navigation }) => {
                     index={1}
                 >
                     <View style={styles.slideDefault}>
-                        <Text style={styles.text}>Rendered</Text>
+                        <EditPage changePage={changePage} data={route} />
                     </View>
 
                     <View style={{ flex: 1 }}>

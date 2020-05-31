@@ -40,7 +40,7 @@ const Picture = ({ route, navigation }) => {
                 console.log(text.status)
                 getResult(location)
             } else if(text.status == 'succeeded'){
-                console.log(text);
+                navigation.navigate('Edit', { text });
             } else {
                 console.log(`Theres a problem in getResult status:${text.status}`)
             }
@@ -78,7 +78,7 @@ const Picture = ({ route, navigation }) => {
         >
             <Header style={styles.header}>
                 <Icon 
-                onPress={() => navigation.navigate('Main')}
+                onPress={() => navigation.navigate('Camera')}
                 type='FontAwesome' name='close' style={{fontSize: 30, color:'white'}}></Icon>
                 <Icon
                 onPress={() => sendPicture()}
