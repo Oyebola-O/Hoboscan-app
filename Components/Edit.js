@@ -7,19 +7,24 @@ import languages from '../languages';
 const Edit = ({ route, navigation }) => {
 	let KEY = config.TRANSKEY;
 	let ENDPOINT = config.TRANSENDPOINT;
-	let data = route.params == undefined ? "" : route.params.text.analyzeResult.readResults[0].lines;
-	const textArea = useRef(null)
 
-	const extractString = (text) => {
-		if(text == "") return ""
-		let string = "";
-		for(let i = 0; i < data.length; i++){
-			string += data[i].text + '\n'
+	const extractString = () => {
+		if(route.params == undefined) {
+			return ""
+		} else if(route.params.text == undefined){
+			return route.params.passOn == undefined ? "" : route.params.passOn.string;
+		} else {
+			let data = route.params.text.analyzeResult.readResults[0].lines;
+			let string = "";
+			for(let i = 0; i < data.length; i++){
+				string += data[i].text + '\n'
+			}
+			return string;
 		}
-		return string;
 	}
 
-	const [string, setString] = useState(extractString(data));
+	const textArea = useRef(null);
+	const [string, setString] = useState(extractString());
 
 	const share = async() => {
 		// Add Alert here
@@ -73,7 +78,7 @@ const Edit = ({ route, navigation }) => {
 		<View style={{ flex: 1 }}>
 			<Header style={styles.header}>
 				<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }} >
-					<TouchableOpacity onPress={() => navigation.navigate('Camera')}>
+					<TouchableOpacity onPress={() => navigation.navigate('Camera', {string})}>
 						<Icon type='Ionicons' name='ios-arrow-back' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 

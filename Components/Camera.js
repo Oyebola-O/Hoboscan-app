@@ -1,13 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Button, Image, Linking } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Header, Icon } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CameraPage = ({ changePage, navigation }) => {
-    // ############ Image Picker #################
+const CameraPage = ({ route, navigation }) => {
+    const camera = useRef();
+    const [hasCameraPermission, setHasPermission] = useState(null);
+    const [type, setType] = useState(Camera.Constants.Type.back);
+    const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+    const [flashIcon, setFlashIcon] = useState('ios-flash-off');
     const [hasRollPerm, setHasRollPerm] = useState(null);
+    let passOn = route.params;
+
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await Camera.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
+    }, []);
+
     useEffect(() => {
         (async () => {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -19,33 +33,15 @@ const CameraPage = ({ changePage, navigation }) => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
                 quality: 1,
             });
             if (!result.cancelled) {
                 usePicture(result)
             }
-        } catch (E) {
-            console.log(E);
+        } catch (error) {
+            console.log(error);
         }
     };
-
-
-
-    // ############### Camera ####################
-    const camera = useRef();
-    const [hasPermission, setHasPermission] = useState(null);
-    const [type, setType] = useState(Camera.Constants.Type.back);
-    const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-    const [flashIcon, setFlashIcon] = useState('ios-flash-off');
-
-    useEffect(() => {
-        (async () => {
-            const { status } = await Camera.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
-    }, []);
 
     const takePicture = async () => {
         try {
@@ -56,11 +52,16 @@ const CameraPage = ({ changePage, navigation }) => {
         }
     }
 
-    // Calling Views
-    if (hasPermission == null) { return <View /> }
-    if (hasPermission == false) { return <Text> Sorry, no camera access </Text> }
-    if (hasRollPerm == null) { return <View /> }
-    if (hasRollPerm == false) { return <Text> Sorry, no camera roll access </Text> }
+    if (hasCameraPermission == null || hasCameraPermission == false || hasRollPerm == null || hasRollPerm == false) {
+        return (
+            <View style={{flex: 1, justifyContent:'center', alignItems:'center', width: 250, alignSelf:'center'}}>
+                <Image source={require('../assets/hoboscan.png')} style={{width: 300, height: 300}} />
+                <Text style={{fontSize:25}}>Ayyy!</Text>
+                <Text style={{textAlign:'center', fontSize:15}}>You are probably getting this screen because you don't have camera or cameral roll access enabled</Text>
+                <Button title="Enable Camera Access" onPress={()=> Linking.openSettings()}/>
+            </View>
+        );
+    }
 
     const usePicture = (image) => {
         navigation.navigate('Picture', { image });
@@ -96,7 +97,7 @@ const CameraPage = ({ changePage, navigation }) => {
 
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
                         <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
-                        <Icon onPress={() => navigation.navigate('Edit')} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
+                        <Icon onPress={() => navigation.navigate('Edit', {passOn})} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
                     </View>
                 </Header>
 

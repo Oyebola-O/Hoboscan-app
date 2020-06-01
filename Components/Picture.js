@@ -1,5 +1,5 @@
 import React , { useState } from 'react';
-import { Text, ImageBackground, StyleSheet, View, Image, ActivityIndicator } from 'react-native';
+import { Text, ImageBackground, StyleSheet, View, Dimensions, ActivityIndicator, Image } from 'react-native';
 import { Header, Icon } from 'native-base';
 import config from '../config'
 
@@ -9,6 +9,9 @@ const Picture = ({ route, navigation }) => {
     const KEY = config.KEY;
     const img = route.params.image;
     let file = { uri:img.uri, type: `test/${img.uri.split('.')[1]}`, name:`test.${img.uri.split('.')[1]}`};
+    const [imageWidth, imageHeight] = [img.width, img.height]
+    const {height, width} = Dimensions.get('window');
+
 
     const uploadToCloud = async(uploadFile) => {
         try {
@@ -86,10 +89,7 @@ const Picture = ({ route, navigation }) => {
         );
     } else {
         return (
-            <ImageBackground
-            source = {{uri: img.uri}}
-            style = {{flex: 1, width: '100%', height: '100%' }}
-            >
+            <ImageBackground source = {{uri: img.uri}} style = {{flex: 1, width: '100%', height: '100%' }}>
                 <Header style={styles.header}>
                     <Icon 
                     onPress={() => navigation.navigate('Camera')}
