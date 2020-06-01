@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Header, Icon } from 'native-base';
-import { Dimensions, Text, Share, View, StyleSheet, TextInput, Keyboard, Clipboard, TouchableOpacity, Picker } from 'react-native';
+import { Dimensions, Share, View, StyleSheet, TextInput, Keyboard, Clipboard, TouchableOpacity, Picker } from 'react-native';
 import config from '../config';
 import languages from '../languages';
 
 const Edit = ({ route, navigation }) => {
 	let KEY = config.TRANSKEY;
 	let ENDPOINT = config.TRANSENDPOINT;
-
-	if(route.params == 'undefined'){return <View></View>}
-	const data = route.params.text.analyzeResult.readResults[0].lines;
+	let data = route.params == undefined ? "" : route.params.text.analyzeResult.readResults[0].lines;
+	const textArea = useRef(null)
 
 	const extractString = (text) => {
+		if(text == "") return ""
 		let string = "";
 		for(let i = 0; i < data.length; i++){
 			string += data[i].text + '\n'
@@ -22,6 +22,7 @@ const Edit = ({ route, navigation }) => {
 	const [string, setString] = useState(extractString(data));
 
 	const share = async() => {
+		// Add Alert here
 		try {
 			let title = string.split('\n')[0];
 			await Share.share({title, message: string});
@@ -33,7 +34,6 @@ const Edit = ({ route, navigation }) => {
 
 	const parseLang = (lang) => {
 		let translation = JSON.parse(lang)
-		console.log(translation[0].translations[0].text);
 		setString(translation[0].translations[0].text);
 	}
 
@@ -95,9 +95,11 @@ const Edit = ({ route, navigation }) => {
 			</Header>
 
 			
-			<View style={{top: 30, height:height*0.7}}>
-				<TextInput style={styles.text} defaultValue = {string} multiline={true} onChangeText={(text) => {setString(text)}}/>
-			</View>
+			<TouchableOpacity onPress={()=> textArea.current.focus()} style={{top: 30, height:height*0.7}} activeOpacity={0.5}>
+				<TextInput style={styles.text}
+				ref={textArea}
+				defaultValue = {string} multiline={true} onChangeText={(text) => {setString(text)}}/>
+			</TouchableOpacity>
 
 			{
 				showTranslate && 
