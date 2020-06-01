@@ -1,9 +1,10 @@
-import React from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import React , { useState } from 'react';
+import { Text, ImageBackground, StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { Header, Icon } from 'native-base';
 import config from '../config'
 
 const Picture = ({ route, navigation }) => {
+    const [showLoader, setShowLoader] = useState(false);
     const ENDPOINT = config.ENDPOINT;
     const KEY = config.KEY;
     const img = route.params.image;
@@ -50,6 +51,7 @@ const Picture = ({ route, navigation }) => {
 
 
     const sendPicture = async() => {
+        setShowLoader(true)
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Ocp-Apim-Subscription-Key", KEY);
@@ -71,21 +73,34 @@ const Picture = ({ route, navigation }) => {
         .catch(error => console.log('error', error));
     }
 
-    return (
-        <ImageBackground
-        source = {{uri: img.uri}}
-        style = {{flex: 1, width: '100%', height: '100%' }}
-        >
-            <Header style={styles.header}>
-                <Icon 
-                onPress={() => navigation.navigate('Camera')}
-                type='FontAwesome' name='close' style={{fontSize: 30, color:'white'}}></Icon>
-                <Icon
-                onPress={() => sendPicture()}
-                type='AntDesign' name='scan1' style={{fontSize: 30, color:'white'}}></Icon>
-            </Header>
-        </ImageBackground>
-    );
+    if(showLoader){
+        return (
+            <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                <Image source={require('../assets/hoboscan.png')} style={{width: 300, height: 300}} />
+                <View style={{flexDirection:'row'}}>
+                <Text style={{fontSize:17}}>Processing </Text>
+                <ActivityIndicator size="small" color='black' />
+                </View>
+                <Text style={{position: 'absolute', bottom:30}}>HÖBO™</Text>
+            </View>
+        );
+    } else {
+        return (
+            <ImageBackground
+            source = {{uri: img.uri}}
+            style = {{flex: 1, width: '100%', height: '100%' }}
+            >
+                <Header style={styles.header}>
+                    <Icon 
+                    onPress={() => navigation.navigate('Camera')}
+                    type='FontAwesome' name='close' style={{fontSize: 30, color:'white'}}></Icon>
+                    <Icon
+                    onPress={() => sendPicture()}
+                    type='FontAwesome5' name='brain' style={{fontSize: 30, color:'white'}}></Icon>
+                </Header>
+            </ImageBackground>
+        );
+    }
 }
 
 const styles = StyleSheet.create({

@@ -7,7 +7,6 @@ import languages from '../languages';
 const Edit = ({ route, navigation }) => {
 	let KEY = config.TRANSKEY;
 	let ENDPOINT = config.TRANSENDPOINT;
-	//const [toLanguage, setToLanguage] = useState(null);
 
 	if(route.params == 'undefined'){return <View></View>}
 	const data = route.params.text.analyzeResult.readResults[0].lines;
@@ -20,7 +19,7 @@ const Edit = ({ route, navigation }) => {
 		return string;
 	}
 
-	let string = extractString(data);
+	const [string, setString] = useState(extractString(data));
 
 	const share = async() => {
 		try {
@@ -35,6 +34,7 @@ const Edit = ({ route, navigation }) => {
 	const parseLang = (lang) => {
 		let translation = JSON.parse(lang)
 		console.log(translation[0].translations[0].text);
+		setString(translation[0].translations[0].text);
 	}
 
 	const translate = async(language) => {
@@ -96,7 +96,7 @@ const Edit = ({ route, navigation }) => {
 
 			
 			<View style={{top: 30, height:height*0.7}}>
-				<TextInput style={styles.text} defaultValue = {string} multiline={true} onChangeText={(text) => {string=text}}/>
+				<TextInput style={styles.text} defaultValue = {string} multiline={true} onChangeText={(text) => {setString(text)}}/>
 			</View>
 
 			{
