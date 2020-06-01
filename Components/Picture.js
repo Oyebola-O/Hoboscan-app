@@ -90,14 +90,10 @@ const Picture = ({ route, navigation }) => {
     } else {
         return (
             <ImageBackground source = {{uri: img.uri}} style = {{flex: 1, width: '100%', height: '100%' }}>
-                <Header style={styles.header}>
-                    <Icon 
-                    onPress={() => navigation.navigate('Camera')}
-                    type='FontAwesome' name='close' style={{fontSize: 30, color:'white'}}></Icon>
-                    <Icon
-                    onPress={() => sendPicture()}
-                    type='FontAwesome5' name='brain' style={{fontSize: 30, color:'white'}}></Icon>
-                </Header>
+                <View style={styles.header}>
+                    <Icon onPress={() => navigation.navigate('Camera')} type='FontAwesome' name='close' style={{fontSize: 30, color:'white'}}/>
+                    <Icon onPress={() => sendPicture()} type='FontAwesome5' name='brain' style={{fontSize: 30, color:'white'}}/>
+                </View>
             </ImageBackground>
         );
     }
@@ -105,13 +101,15 @@ const Picture = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     header: {
+        flex:1,
+        flexDirection:'row',
         position: 'absolute',
+        width:'100%',
+        paddingTop:25,
+        paddingLeft:20,
+        paddingRight:20,
         backgroundColor: 'transparent',
         justifyContent: 'space-between',
-        left: 20,
-        top: 30,
-        right: 20,
-        borderBottomWidth: 0,
         zIndex: 100
     }
 });

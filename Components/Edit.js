@@ -76,7 +76,7 @@ const Edit = ({ route, navigation }) => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Header style={styles.header}>
+			<View style={styles.header}>
 				<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }} >
 					<TouchableOpacity onPress={() => navigation.navigate('Camera', {string})}>
 						<Icon type='Ionicons' name='ios-arrow-back' style={{ fontSize: 25 }} />
@@ -101,11 +101,18 @@ const Edit = ({ route, navigation }) => {
 						<Icon type='MaterialIcons' name='keyboard-hide' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 				</View>
-			</Header>
+			</View>
 
 			
 			<TouchableOpacity onPress={()=> textArea.current.focus()} style={{top: 30, height:height*0.7}} activeOpacity={0.8}>
-				<TextInput style={styles.text}
+				<TextInput 
+				style={{
+					height:height*0.7,
+					top:20,
+					paddingTop: 20,
+					paddingLeft: 30,
+					paddingRight: 30
+				}}
 				ref={textArea}
 				defaultValue = {string} multiline={true} onChangeText={(text) => {setString(text)}}/>
 			</TouchableOpacity>
@@ -133,17 +140,14 @@ const Edit = ({ route, navigation }) => {
 const styles = StyleSheet.create({
 	header: {
 		position: 'absolute',
+		flex:1,
+		flexDirection:'row',
+		width:'100%',
+        paddingTop:25,
+        paddingLeft:20,
+		paddingRight:20,
 		justifyContent: 'space-between',
-		top: 30,
-		borderBottomWidth: 0,
 		zIndex: 100
-	},
-
-	text: {
-		top:20,
-		paddingTop: 20,
-		paddingLeft: 30,
-		paddingRight: 30
 	},
 
 	translate: {

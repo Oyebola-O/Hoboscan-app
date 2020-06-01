@@ -71,7 +71,7 @@ const CameraPage = ({ route, navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <Camera ref={camera} style={{ flex: 1, justifyContent: 'space-between' }} type={type}>
-                <Header style={styles.header}>
+                <View style={styles.header}>
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
                         <Icon
                             onPress={() => {
@@ -99,15 +99,12 @@ const CameraPage = ({ route, navigation }) => {
                         <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
                         <Icon onPress={() => navigation.navigate('Edit', {passOn})} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
                     </View>
-                </Header>
+                </View>
 
 
-                <View style={styles.footer}>
-                    <View>
-                        <Icon
-                            onPress={() => takePicture()}
-                            type='Entypo' name='circle' style={{ color: 'white', fontSize: 80, paddingBottom: 10 }}></Icon>
-                    </View>
+                <View style={{position: "absolute", bottom: 30, alignSelf:'center'}}>
+                    <Icon onPress={() => takePicture()}
+                        type='Entypo' name='circle' style={{ color: 'white', fontSize: 80, paddingBottom: 10 }}/>
                 </View>
             </Camera>
         </View>
@@ -117,20 +114,14 @@ const CameraPage = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     header: {
         position: 'absolute',
+        width:'100%',
+        flexDirection:'row',
+        paddingTop:25,
+        paddingLeft:10,
+        paddingRight:10,
         backgroundColor: 'transparent',
-        left: 0,
-        top: 30,
-        right: 0,
         zIndex: 100
     },
-
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-        marginBottom: 30,
-        alignItems: "flex-end"
-    }
 });
 
 export default CameraPage;
