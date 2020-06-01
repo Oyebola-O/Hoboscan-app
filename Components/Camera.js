@@ -72,15 +72,6 @@ const CameraPage = ({ changePage, navigation }) => {
             <Camera ref={camera} style={{ flex: 1, justifyContent: 'space-between' }} type={type}>
                 <Header style={styles.header}>
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
-                        <Icon onPress={() => navigation.navigate('Edit')} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
-                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
-                    </View>
-
-                    <View style={{ flexDirection: 'row', flex: 4, justifyContent: 'center' }}>
-                        <Text style={{ color: 'white', fontSize: 20 }}>HÖBOscan</Text>
-                    </View>
-
-                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
                         <Icon
                             onPress={() => {
                                 if (flash == Camera.Constants.FlashMode.off) {
@@ -97,6 +88,15 @@ const CameraPage = ({ changePage, navigation }) => {
                                 setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)
                             }}
                             name='ios-reverse-camera' style={{ color: 'white' }} />
+                    </View>
+
+                    <View style={{ flexDirection: 'row', flex: 4, justifyContent: 'center' }}>
+                        <Text style={{ color: 'white', fontSize: 20 }}>HÖBOscan</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
+                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
+                        <Icon onPress={() => navigation.navigate('Edit')} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
                     </View>
                 </Header>
 

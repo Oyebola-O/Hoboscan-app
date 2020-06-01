@@ -73,6 +73,10 @@ const Edit = ({ route, navigation }) => {
 		<View style={{ flex: 1 }}>
 			<Header style={styles.header}>
 				<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }} >
+					<TouchableOpacity onPress={() => navigation.navigate('Camera')}>
+						<Icon type='Ionicons' name='ios-arrow-back' style={{ fontSize: 25 }} />
+					</TouchableOpacity>
+
 					<TouchableOpacity onPress={() => share()}>
 						<Icon type='Ionicons' name='ios-share' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
@@ -95,7 +99,7 @@ const Edit = ({ route, navigation }) => {
 			</Header>
 
 			
-			<TouchableOpacity onPress={()=> textArea.current.focus()} style={{top: 30, height:height*0.7}} activeOpacity={0.5}>
+			<TouchableOpacity onPress={()=> textArea.current.focus()} style={{top: 30, height:height*0.7}} activeOpacity={0.8}>
 				<TextInput style={styles.text}
 				ref={textArea}
 				defaultValue = {string} multiline={true} onChangeText={(text) => {setString(text)}}/>
