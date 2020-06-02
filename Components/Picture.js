@@ -105,28 +105,37 @@ const Picture = ({ route, navigation }) => {
         }
     }
 
-    const getResult = async (location) => {
-        let head = new Headers();
-        head.append("Ocp-Apim-Subscription-Key", KEY);
-        var requestOptions = {
-            method: 'GET',
-            headers: head,
-            redirect: 'follow'
-        };
-        let res = await fetch(location, requestOptions);
-        if(res.status != 200){ return 'MERROR' }
-        res = await res.text()
-        let text = JSON.parse(res)
 
-        if (text.status == 'running' || text.status == 'notStarted') {
-            console.log(text.status)
-            return getResult(location)
-        } else if (text.status == 'succeeded') {
-            return text;
-        } else {
-            console.log(`ERROR IN getResult WITH STATUS:${text.status}`)
-            return 'ERROR'
-        }
+    const recurse = (location) => {
+        let timer = setInterval(async function(){
+            let head = new Headers();
+            head.append("Ocp-Apim-Subscription-Key", KEY);
+            var requestOptions = {
+                method: 'GET',
+                headers: head,
+                redirect: 'follow'
+            };
+            let res = await fetch(location, requestOptions);
+            if(res.status != 200){
+                console.log(res.status)
+                clearInterval(timer)
+                microsoftAlert()
+            } else {
+                res = await res.text()
+                let text = JSON.parse(res)
+        
+                if (text.status == 'running' || text.status == 'notStarted') {
+                    console.log(text.status)
+                } else if (text.status == 'succeeded') {
+                    clearInterval(timer)
+                    navigation.navigate('Edit', { text });
+                } else {
+                    console.log(`ERROR IN getResult WITH STATUS:${text.status}`)
+                    clearInterval(timer)
+                    failAlert()
+                }
+            }
+        }, 1000);
     }
 
 
@@ -136,10 +145,7 @@ const Picture = ({ route, navigation }) => {
         if(fileurl != 'ERROR'){
             let locationUrl = await getLocationUrl(fileurl);
             if(locationUrl != 'ERROR'){
-                let text = await getResult(locationUrl);
-                if(text != 'ERROR' || text != 'MERROR'){
-                    navigation.navigate('Edit', { text });
-                } else {text == 'MERROR' ? microsoftAlert() : failAlert()}
+                recurse(locationUrl)
             } else { sendPictureAlert() }
         } else { uploadAlert() }
     }

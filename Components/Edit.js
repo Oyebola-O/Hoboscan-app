@@ -14,6 +14,7 @@ const Edit = ({ route, navigation }) => {
 		} else if(route.params.text == undefined){
 			return route.params.passOn == undefined ? "" : route.params.passOn.string;
 		} else {
+			console.log(route.params)
 			let data = route.params.text.analyzeResult.readResults[0].lines;
 			let string = "";
 			for(let i = 0; i < data.length; i++){
