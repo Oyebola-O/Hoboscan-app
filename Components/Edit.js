@@ -82,26 +82,26 @@ const Edit = ({ route, navigation, changePage }) => {
 		<View style={{ flex: 1 }}>
 			<View style={styles.header}>
 				<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }} >
-					<TouchableOpacity onPress={() => {changePage(0) }}>
+					<TouchableOpacity style={styles.buttons} onPress={() => {changePage(0) }}>
 						<Icon type='Ionicons' name='ios-arrow-back' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 
-					<TouchableOpacity onPress={() => share()}>
+					<TouchableOpacity style={styles.buttons} onPress={() => share()}>
 						<Icon type='Ionicons' name='ios-share' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 					
-					<TouchableOpacity onPress={() => {
+					<TouchableOpacity style={styles.buttons} onPress={() => {
 						Keyboard.dismiss();
 						showTranslate == true ? setShowTranslate(false) : setShowTranslate(true)
 					}}>
 						<Icon type='Entypo' name='language' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 
-					<TouchableOpacity onPress={() => Clipboard.setString(string)}>
+					<TouchableOpacity style={styles.buttons} onPress={() => Clipboard.setString(string)}>
 						<Icon type='MaterialIcons' name='content-copy' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 
-					<TouchableOpacity onPress={()=> Keyboard.dismiss()}>
+					<TouchableOpacity style={styles.buttons} onPress={()=> Keyboard.dismiss()}>
 						<Icon type='MaterialIcons' name='keyboard-hide' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 				</View>
@@ -163,6 +163,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignSelf: 'stretch',
 		bottom: 30
+	},
+
+	buttons: {
+		padding:7
 	}
 });
 

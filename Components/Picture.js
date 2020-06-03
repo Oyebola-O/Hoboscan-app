@@ -166,7 +166,7 @@ const Picture = ({ route, navigation }) => {
         return (
             <ImageBackground source={{ uri: img.uri }} style={{ flex: 1, width: '100%', height: '100%' }}>
                 <View style={styles.header}>
-                    <Icon onPress={() => navigation.navigate('Camera')} type='FontAwesome' name='close' style={{ fontSize: 30, color: 'white' }} />
+                    <Icon onPress={() => navigation.navigate('Main')} type='FontAwesome' name='close' style={{ fontSize: 30, color: 'white' }} />
                     <Icon onPress={() => processImage()} type='FontAwesome5' name='brain' style={{ fontSize: 30, color: 'white' }} />
                 </View>
             </ImageBackground>
