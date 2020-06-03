@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Header, Icon } from 'native-base';
 import { Dimensions, Share, View, StyleSheet, TextInput, Keyboard, Clipboard, TouchableOpacity, Picker } from 'react-native';
 import config from '../config';
 import languages from '../languages';
 
-const Edit = ({ route, navigation }) => {
+const Edit = ({ route, navigation, changePage }) => {
 	let KEY = config.TRANSKEY;
 	let ENDPOINT = config.TRANSENDPOINT;
 
@@ -14,7 +14,6 @@ const Edit = ({ route, navigation }) => {
 		} else if(route.params.text == undefined){
 			return route.params.passOn == undefined ? "" : route.params.passOn.string;
 		} else {
-			console.log(route.params)
 			let data = route.params.text.analyzeResult.readResults[0].lines;
 			let string = "";
 			for(let i = 0; i < data.length; i++){
@@ -74,12 +73,16 @@ const Edit = ({ route, navigation }) => {
 	const [showTranslate, setShowTranslate] = useState(false);
 	const [toLanguage, setToLanguage] = useState(null);
 
+	useEffect(()=> {
+		setString(extractString());
+	},[route.params])
+
 
 	return (
 		<View style={{ flex: 1 }}>
 			<View style={styles.header}>
 				<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }} >
-					<TouchableOpacity onPress={() => navigation.navigate('Camera', {string})}>
+					<TouchableOpacity onPress={() => {changePage(0) }}>
 						<Icon type='Ionicons' name='ios-arrow-back' style={{ fontSize: 25 }} />
 					</TouchableOpacity>
 
@@ -110,7 +113,7 @@ const Edit = ({ route, navigation }) => {
 				style={{
 					height:height*0.7,
 					top:20,
-					paddingTop: 20,
+					paddingTop: 35,
 					paddingLeft: 30,
 					paddingRight: 30
 				}}
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
 		flex:1,
 		flexDirection:'row',
 		width:'100%',
-        paddingTop:25,
+        paddingTop:45,
         paddingLeft:20,
 		paddingRight:20,
 		justifyContent: 'space-between',

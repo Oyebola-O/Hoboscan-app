@@ -5,14 +5,13 @@ import { Header, Icon } from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CameraPage = ({ route, navigation }) => {
+const CameraPage = ({ route, navigation, changePage  }) => {
     const camera = useRef();
     const [hasCameraPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
     const [flashIcon, setFlashIcon] = useState('ios-flash-off');
     const [hasRollPerm, setHasRollPerm] = useState(null);
-    let passOn = route.params;
 
 
     useEffect(() => {
@@ -97,7 +96,7 @@ const CameraPage = ({ route, navigation }) => {
 
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
                         <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
-                        <Icon onPress={() => navigation.navigate('Edit', {passOn})} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
+                        <Icon onPress={() => changePage(1)} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
                     </View>
                 </View>
 
@@ -116,12 +115,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width:'100%',
         flexDirection:'row',
-        paddingTop:25,
+        paddingTop:45,
         paddingLeft:10,
         paddingRight:10,
         backgroundColor: 'transparent',
         zIndex: 100
-    },
+    }
 });
 
 export default CameraPage;

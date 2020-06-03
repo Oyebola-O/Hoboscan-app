@@ -128,7 +128,7 @@ const Picture = ({ route, navigation }) => {
                     console.log(text.status)
                 } else if (text.status == 'succeeded') {
                     clearInterval(timer)
-                    navigation.navigate('Edit', { text });
+                    navigation.navigate('Main', { text });
                 } else {
                     console.log(`ERROR IN getResult WITH STATUS:${text.status}`)
                     clearInterval(timer)
@@ -154,7 +154,7 @@ const Picture = ({ route, navigation }) => {
     if (showLoader) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={require('../assets/hoboscan.png')} style={{ width: 300, height: 300 }} />
+                <Image source={require('../assets/copy.png')} style={{ width: 300, height: 300 }} />
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: 17 }}>Processing </Text>
                     <ActivityIndicator size="small" color='black' />
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         position: 'absolute',
         width: '100%',
-        paddingTop: 25,
+        paddingTop: 45,
         paddingLeft: 20,
         paddingRight: 20,
         backgroundColor: 'transparent',
