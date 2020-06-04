@@ -10,9 +10,9 @@ const App = () => {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
-				<Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+				<Stack.Screen name="Main" component={Main} options={{ headerShown: false, gestureEnabled:false }} />
 
-				<Stack.Screen name="Picture" component={Picture} options={{ headerShown: false }} />
+				<Stack.Screen name="Picture" component={Picture} options={{ headerShown: false, gestureEnabled:false }} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

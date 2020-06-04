@@ -82,7 +82,7 @@ const CameraPage = ({ route, navigation, changePage  }) => {
                                     setFlashIcon('ios-flash-off');
                                 }
                             }}
-                            name={flashIcon} style={{ color: 'white' }} />
+                            name={flashIcon} style={{ color: 'white'}} />
                         <Icon
                             onPress={() => {
                                 setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)
@@ -90,7 +90,7 @@ const CameraPage = ({ route, navigation, changePage  }) => {
                             name='ios-reverse-camera' style={{ color: 'white' }} />
                     </View>
 
-                    <View style={{ flexDirection: 'row', flex: 4, justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center'}}>
                         <Text style={{ color: 'white', fontSize: 20 }}>HÖBOscan</Text>
                     </View>
 

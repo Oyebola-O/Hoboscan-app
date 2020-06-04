@@ -143,6 +143,7 @@ const Edit = ({ route, navigation, changePage }) => {
 					selectedValue={toLanguage}
 					itemStyle={{ backgroundColor:'rgb(248, 248, 248)'}}
 					onValueChange={(itemValue, itemIndex) => setToLanguage(itemValue)}
+					mode='dropdown'
 					>
 						{pickerItems}
 					</Picker>
