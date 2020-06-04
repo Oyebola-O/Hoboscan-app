@@ -13,13 +13,13 @@ const Picture = ({ route, navigation }) => {
     /***** ALERTS *****/
     const executeDismiss = () => {
         setShowLoader(false);
-        navigation.navigate('Camera');
+        navigation.navigate('Main');
     }
 
     const uploadAlert = () => {
         Alert.alert(
             "Ayyy! We couldn't upload the photo",
-            "The problem is either your internet connection or the image is too large",
+            "Check your internet connection",
             [
                 { text: "OK", onPress: () => executeDismiss() }
             ],
@@ -30,7 +30,7 @@ const Picture = ({ route, navigation }) => {
     const sendPictureAlert = () => {
         Alert.alert(
             "Ayyy! It seems there might be something wrong with your image",
-            "The image is either blury, has no text or has an unconventional size or dimension",
+            "The image file might be too big or too small",
             [
                 { text: "OK", onPress: () => executeDismiss() }
             ],
@@ -41,7 +41,7 @@ const Picture = ({ route, navigation }) => {
     const microsoftAlert = () => {
         Alert.alert(
             "Ayyy! It seems there might be something wrong on our end",
-            "HÖBO sincerely apologizes for this error",
+            "HÖBO sincerely apologizes for this",
             [
                 { text: "OK", onPress: () => executeDismiss() }
             ],
@@ -52,7 +52,7 @@ const Picture = ({ route, navigation }) => {
     const failAlert = () => {
         Alert.alert(
             "Ayyy! It seems we could not read this image",
-            "The image either wasn't taken well or does not contain any text. Try taking it again with a more suitable image",
+            "The image either wasn't taken well or does not contain any text. Try again with a more suitable image",
             [
                 { text: "OK", onPress: () => executeDismiss() }
             ],
@@ -91,7 +91,6 @@ const Picture = ({ route, navigation }) => {
                 body: raw,
                 redirect: 'follow'
             };
-    
             let res = await fetch(`${ENDPOINT}vision/v3.0/read/analyze`, requestOptions);
             if(res.status != 202){ 
                 console.log('ERROR IN getLocationUrl CHECK STATUS BLOCK')
@@ -117,7 +116,6 @@ const Picture = ({ route, navigation }) => {
             };
             let res = await fetch(location, requestOptions);
             if(res.status != 200){
-                console.log(res.status)
                 clearInterval(timer)
                 microsoftAlert()
             } else {

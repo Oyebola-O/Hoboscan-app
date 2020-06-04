@@ -1,12 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Header, Icon } from 'native-base';
-import { Dimensions, Share, View, StyleSheet, TextInput, Keyboard, Clipboard, TouchableOpacity, Picker } from 'react-native';
+import { Dimensions, Share, View, StyleSheet, TextInput, Keyboard, Clipboard, TouchableOpacity, Picker, Alert } from 'react-native';
 import config from '../config';
 import languages from '../languages';
 
 const Edit = ({ route, navigation, changePage }) => {
 	let KEY = config.TRANSKEY;
 	let ENDPOINT = config.TRANSENDPOINT;
+
+	const translateAlert = () => {
+        Alert.alert(
+			"Ayyy! It seems we could not translate this one",
+			"",
+            [{ text: "OK"}],
+            { cancelable: true }
+        );
+    }
 
 	const extractString = () => {
 		if(route.params == undefined) {
@@ -27,7 +36,6 @@ const Edit = ({ route, navigation, changePage }) => {
 	const [string, setString] = useState(extractString());
 
 	const share = async() => {
-		// Add Alert here
 		try {
 			let title = string.split('\n')[0];
 			await Share.share({title, message: string});
@@ -55,13 +63,16 @@ const Edit = ({ route, navigation, changePage }) => {
 				redirect: 'follow'
 			}
 			const url = `${ENDPOINT}${language}`;
-			console.log(url)
-			fetch(url, requestOptions)
-  			.then(response => response.text())
-  			.then(result => parseLang(result))
-  			.catch(error => console.log('error', error));
+			let res = await fetch(url, requestOptions);
+			if(res.status == 200){
+				res = await res.text()
+				parseLang(res)
+			} else {
+				translateAlert()
+			}
 		} catch (error) {
 			console.log('error', error);
+			translateAlert()
 		}
 	}
 
@@ -156,6 +167,10 @@ const styles = StyleSheet.create({
 
 	translate: {
 		alignSelf: 'center',
+		padding:5,
+		shadowOffset:{  width: 0,  height: 0,  },
+		shadowColor: 'black',
+		shadowOpacity: 0.9,
 		zIndex: 20
 	},
 
