@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
-import { Text, ImageBackground, StyleSheet, View, ActivityIndicator, Image, Alert } from 'react-native';
+import React, { useState } from 'react'
+import { Dimensions, ImageBackground, StyleSheet, View, ActivityIndicator, Image, Alert, Text } from 'react-native'
+import { ImageManipulator } from 'expo-image-crop'
 import { Icon } from 'native-base';
-import config from '../config'
+import config from '../config';
 
 const Picture = ({ route, navigation }) => {
+
     const [showLoader, setShowLoader] = useState(false);
     const ENDPOINT = config.ENDPOINT;
     const KEY = config.KEY;
     const img = route.params.image;
-    let file = { uri: img.uri, type: `test/${img.uri.split('.')[1]}`, name: `test.${img.uri.split('.')[1]}` };
 
-    /***** ALERTS *****/
-    const executeDismiss = () => {
+    const [isVisible, setIsVisible] = useState(false)
+    const [uri, setUri] = useState(img.uri)
+
+
+    const onToggleModal = () => {
+        isVisible == true ? setIsVisible(false) : setIsVisible(true)
+    }
+
+    const { width, height } = Dimensions.get('window')
+
+     /***** ALERTS *****/
+     const executeDismiss = () => {
         setShowLoader(false);
         navigation.navigate('Main');
     }
@@ -139,6 +150,7 @@ const Picture = ({ route, navigation }) => {
 
     const processImage = async() => {
         setShowLoader(true)
+        let file = { uri: uri, type: `test/${uri.split('.')[1]}`, name: `test.${uri.split('.')[1]}` };
         let fileurl = await uploadToCloud(file);
         if(fileurl != 'ERROR'){
             let locationUrl = await getLocationUrl(fileurl);
@@ -148,8 +160,9 @@ const Picture = ({ route, navigation }) => {
         } else { uploadAlert() }
     }
 
+
     /**** RENDER ****/
-    if (showLoader) {
+    if(showLoader){
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={require('../assets/copy.png')} style={{ width: 300, height: 300 }} />
@@ -162,15 +175,31 @@ const Picture = ({ route, navigation }) => {
         );
     } else {
         return (
-            <ImageBackground source={{ uri: img.uri }} style={{ flex: 1, width: '100%', height: '100%' }}>
+            <ImageBackground
+                resizeMode="contain"
+                style={{
+                    height, width,
+                    backgroundColor: 'black',
+                }}
+                source={{ uri }}
+            >
                 <View style={styles.header}>
-                    <Icon onPress={() => navigation.navigate('Main')} type='FontAwesome' name='close' style={{ fontSize: 30, color: 'white' }} />
-                    <Icon onPress={() => processImage()} type='FontAwesome5' name='brain' style={{ fontSize: 30, color: 'white' }} />
+                    <Icon onPress={() => navigation.navigate('Main')} type='FontAwesome' name='close' style={styles.button} />
+                    <Icon onPress={() => setIsVisible(true)} type='Entypo' name='crop' style={styles.button} />
+                    <Icon onPress={() => processImage()} type='FontAwesome5' name='brain' style={styles.button} />
                 </View>
+    
+                <ImageManipulator
+                    photo={{ uri }}
+                    isVisible={isVisible}
+                    onPictureChoosed={({ uri: uriM }) => setUri(uriM)}
+                    onToggleModal={onToggleModal}
+                />
             </ImageBackground>
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     header: {
@@ -184,6 +213,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         justifyContent: 'space-between',
         zIndex: 100
+    },
+
+    button: {
+        fontSize: 30, 
+        color: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,  
+        elevation: 5
     }
 });
 
