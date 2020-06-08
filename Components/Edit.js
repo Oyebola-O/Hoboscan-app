@@ -15,13 +15,20 @@ const Edit = ({ route, navigation, changePage }) => {
             [{ text: "OK"}],
             { cancelable: true }
         );
+	}
+
+	const emptyText = () => {
+        Alert.alert(
+			"Ayyy! There was no text in this image so we'll just leave you with an empty page :)",
+			"",
+            [{ text: "OK"}],
+            { cancelable: true }
+        );
     }
 
 	const extractString = () => {
 		if(route.params == undefined) {
 			return ""
-		} else if(route.params.text == undefined){
-			return route.params.passOn == undefined ? "" : route.params.passOn.string;
 		} else {
 			let data = route.params.text.analyzeResult.readResults[0].lines;
 			let string = "";
@@ -85,7 +92,9 @@ const Edit = ({ route, navigation, changePage }) => {
 	const [toLanguage, setToLanguage] = useState(null);
 
 	useEffect(()=> {
-		setString(extractString());
+		let str = extractString();
+		setString(str);
+		if(route.params != undefined && str == "") { emptyText() }
 	},[route.params])
 
 
@@ -119,10 +128,10 @@ const Edit = ({ route, navigation, changePage }) => {
 			</View>
 
 			
-			<TouchableOpacity onPress={()=> textArea.current.focus()} style={{top: 30, height:height*0.7}} activeOpacity={0.8}>
+			<TouchableOpacity style={{top: 30, height:height*0.9}} activeOpacity={0.8}>
 				<TextInput 
 				style={{
-					height:height*0.7,
+					height:height*0.9,
 					top:20,
 					paddingTop: 35,
 					paddingLeft: 30,
@@ -134,14 +143,14 @@ const Edit = ({ route, navigation, changePage }) => {
 
 			{
 				showTranslate && 
-				<View style={{backgroundColor:'rgb(248, 248, 248)', padding:20}}>
+				<View style={styles.translateBox}>
 					<TouchableOpacity onPress={()=> translate(toLanguage)} style={styles.translate}>
 						<Icon type='FontAwesome' name='language' style={{ fontSize: 35 }} />
 					</TouchableOpacity>
 					<Picker 
 					style={styles.picker}
 					selectedValue={toLanguage}
-					itemStyle={{ backgroundColor:'rgb(248, 248, 248)'}}
+					itemStyle={{ backgroundColor:'rgb(210, 210, 210)'}}
 					onValueChange={(itemValue, itemIndex) => setToLanguage(itemValue)}
 					mode='dropdown'
 					>
@@ -153,11 +162,15 @@ const Edit = ({ route, navigation, changePage }) => {
 	);
 }
 
+
+
+
 const styles = StyleSheet.create({
 	header: {
 		position: 'absolute',
 		flex:1,
 		flexDirection:'row',
+		backgroundColor: 'rgb(242, 242, 242)',
 		width:'100%',
         paddingTop:45,
         paddingLeft:20,
@@ -166,12 +179,22 @@ const styles = StyleSheet.create({
 		zIndex: 100
 	},
 
+	translateBox: {
+		backgroundColor:'rgb(210, 210, 210)', 
+		bottom: 0,
+		padding:20, 
+		position: "absolute", 
+		width:'100%'
+	},
+
 	translate: {
 		alignSelf: 'center',
 		padding:5,
-		shadowOffset:{  width: 0,  height: 0,  },
 		shadowColor: 'black',
-		shadowOpacity: 0.9,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.8,
+        shadowRadius: 10,  
+        elevation: 5,
 		zIndex: 20
 	},
 

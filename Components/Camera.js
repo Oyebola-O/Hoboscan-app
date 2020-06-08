@@ -82,12 +82,12 @@ const CameraPage = ({ route, navigation, changePage  }) => {
                                     setFlashIcon('ios-flash-off');
                                 }
                             }}
-                            name={flashIcon} style={{ color: 'white'}} />
+                            name={flashIcon} style={styles.button1} />
                         <Icon
                             onPress={() => {
                                 setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)
                             }}
-                            name='ios-reverse-camera' style={{ color: 'white' }} />
+                            name='ios-reverse-camera' style={styles.button1} />
                     </View>
 
                     <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center'}}>
@@ -95,8 +95,8 @@ const CameraPage = ({ route, navigation, changePage  }) => {
                     </View>
 
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
-                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={{ color: 'white', fontSize: 25 }} />
-                        <Icon onPress={() => changePage(1)} type='Feather' name='edit' style={{ color: 'white', fontSize: 25 }} />
+                        <Icon onPress={() => pickImage()} type='FontAwesome' name='photo' style={styles.button} />
+                        <Icon onPress={() => changePage(1)} type='Feather' name='edit' style={styles.button} />
                     </View>
                 </View>
 
@@ -120,6 +120,25 @@ const styles = StyleSheet.create({
         paddingRight:10,
         backgroundColor: 'transparent',
         zIndex: 100
+    },
+
+    button1: {
+        color: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,  
+        elevation: 5
+    },
+
+    button: {
+        fontSize: 25, 
+        color: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,  
+        elevation: 5
     }
 });
 
