@@ -133,6 +133,7 @@ const Edit = ({ route, navigation, changePage }) => {
 				style={{
 					height:height*0.9,
 					top:20,
+					textAlignVertical: "top",
 					paddingTop: 35,
 					paddingLeft: 30,
 					paddingRight: 30
