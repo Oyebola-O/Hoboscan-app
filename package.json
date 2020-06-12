@@ -19,6 +19,7 @@
     "expo-image-crop": "^1.0.4",
     "expo-image-manipulator": "^8.1.0",
     "expo-image-picker": "^8.1.0",
+    "firebase": "7.9.0",
     "install": "^0.13.0",
     "native-base": "^2.13.12",
     "npm": "^6.14.5",

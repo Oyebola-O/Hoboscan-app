@@ -2,14 +2,18 @@ import React, { useState } from 'react'
 import { Dimensions, ImageBackground, StyleSheet, View, ActivityIndicator, Image, Alert, Text } from 'react-native'
 import { ImageManipulator } from 'expo-image-crop'
 import { Icon } from 'native-base';
+import * as firebase from 'firebase';
 import config from '../config';
 
 const Picture = ({ route, navigation }) => {
+    
+    if(!firebase.apps.length) firebase.initializeApp(config.firebaseConfig);
 
     const [showLoader, setShowLoader] = useState(false);
     const ENDPOINT = config.ENDPOINT;
     const KEY = config.KEY;
     const img = route.params.image;
+    let ref
 
     const [isVisible, setIsVisible] = useState(false)
     const [uri, setUri] = useState(img.uri)
@@ -21,8 +25,8 @@ const Picture = ({ route, navigation }) => {
 
     const { width, height } = Dimensions.get('window')
 
-     /***** ALERTS *****/
-     const executeDismiss = () => {
+    /***** ALERTS *****/
+    const executeDismiss = () => {
         setShowLoader(false);
         navigation.navigate('Main');
     }
@@ -74,28 +78,37 @@ const Picture = ({ route, navigation }) => {
     /***** API CALLS *****/
     const uploadToCloud = async (uploadFile) => {
         try {
-            const data = new FormData();
-            data.append('file', uploadFile)
-            data.append('upload_preset', 'hoboscanapp')
-            data.append('cloud_name', 'hoboscan')
-            let url = "https://api.cloudinary.com/v1_1/hoboscan/image/upload"
-            let res = await fetch(url, { method: 'POST', body: data });
-            res = await res.json()
-            return res.url
+            let name = `pic${~~(Math.random()*10000)}`
+            let blob = await fetch(uploadFile.uri)
+            blob = await blob.blob();
+    
+            ref = firebase.storage().ref().child(`images/${name}`)
+            let snapshot = await ref.put(blob)
+            blob.close()
+            let res = await snapshot.ref.getDownloadURL();
+            return res
         } catch (error) {
             console.log(`ERROR IN uploadToCloud CATCH BLOCK ${error}`)
             return 'ERROR'
         }
     }
 
-    const getLocationUrl = async(fileurl) => {
+    const deleteImage = async () => {
+        try {
+            ref.delete()
+        } catch (error) {
+            console.log('ERROR IN deleteImage')
+        }
+    }
+
+    const getLocationUrl = async (fileurl) => {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
             myHeaders.append("Ocp-Apim-Subscription-Key", KEY);
-    
+
             const raw = JSON.stringify({ "url": fileurl });
-    
+
             var requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
@@ -103,7 +116,8 @@ const Picture = ({ route, navigation }) => {
                 redirect: 'follow'
             };
             let res = await fetch(`${ENDPOINT}vision/v3.0/read/analyze`, requestOptions);
-            if(res.status != 202){ 
+            if (res.status != 202) {
+                console.log(res.status)
                 console.log('ERROR IN getLocationUrl CHECK STATUS BLOCK')
                 return 'ERROR'
             } else {
@@ -117,7 +131,7 @@ const Picture = ({ route, navigation }) => {
 
 
     const recurse = (location) => {
-        let timer = setInterval(async function(){
+        let timer = setInterval(async function () {
             let head = new Headers();
             head.append("Ocp-Apim-Subscription-Key", KEY);
             var requestOptions = {
@@ -126,35 +140,38 @@ const Picture = ({ route, navigation }) => {
                 redirect: 'follow'
             };
             let res = await fetch(location, requestOptions);
-            if(res.status != 200){
+            if (res.status != 200) {
                 clearInterval(timer)
                 microsoftAlert()
+                deleteImage()
             } else {
                 res = await res.text()
                 let text = JSON.parse(res)
-        
+
                 if (text.status == 'running' || text.status == 'notStarted') {
                     console.log(text.status)
                 } else if (text.status == 'succeeded') {
                     clearInterval(timer)
                     navigation.navigate('Main', { text });
+                    deleteImage()
                 } else {
                     console.log(`ERROR IN getResult WITH STATUS:${text.status}`)
                     clearInterval(timer)
                     failAlert()
+                    deleteImage()
                 }
             }
         }, 1000);
     }
 
 
-    const processImage = async() => {
+    const processImage = async () => {
         setShowLoader(true)
         let file = { uri: uri, type: `test/${uri.split('.')[1]}`, name: `test.${uri.split('.')[1]}` };
         let fileurl = await uploadToCloud(file);
-        if(fileurl != 'ERROR'){
+        if (fileurl != 'ERROR') {
             let locationUrl = await getLocationUrl(fileurl);
-            if(locationUrl != 'ERROR'){
+            if (locationUrl != 'ERROR') {
                 recurse(locationUrl)
             } else { sendPictureAlert() }
         } else { uploadAlert() }
@@ -162,7 +179,7 @@ const Picture = ({ route, navigation }) => {
 
 
     /**** RENDER ****/
-    if(showLoader){
+    if (showLoader) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={require('../assets/copy.png')} style={{ width: 300, height: 300 }} />
@@ -188,7 +205,7 @@ const Picture = ({ route, navigation }) => {
                     <Icon onPress={() => setIsVisible(true)} type='Entypo' name='crop' style={styles.button} />
                     <Icon onPress={() => processImage()} type='FontAwesome5' name='brain' style={styles.button} />
                 </View>
-    
+
                 <ImageManipulator
                     photo={{ uri }}
                     isVisible={isVisible}
@@ -216,12 +233,12 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        fontSize: 30, 
+        fontSize: 30,
         color: 'white',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.5,
-        shadowRadius: 5,  
+        shadowRadius: 5,
         elevation: 5
     }
 });
