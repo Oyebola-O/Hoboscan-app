@@ -26,12 +26,17 @@
     ],
     "ios": {
       "bundleIdentifier": "com.hobo.hoboscan",
+      "infoPlist": {
+        "NSCameraUsageDescription": "To upload images taken by the camera to our api to scan for text, images are automatically deleted once scanned.",
+        "NSPhotoLibraryUsageDescription": "To upload images chosen by the user to our api to scan for text, images are automatically deleted once scanned."
+      },
       "supportsTablet": true
     },
     "android": {
       "package": "com.hobo.hoboscan",
       "permissions": [
-        "CAMERA"
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE"
       ]
     }
   }
