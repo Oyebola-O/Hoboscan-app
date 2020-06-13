@@ -2,13 +2,13 @@
   "expo": {
     "name": "Hoboscan",
     "slug": "Hoboscan",
-    "description":"It can extract text from images and allows you to translate to multiple other languages",
+    "description": "It can extract text from images and allows you to translate to multiple other languages",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "sdkVersion":"37.0.0",
+    "sdkVersion": "37.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "owner":"oyebola",
+    "owner": "oyebola",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -25,6 +25,7 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "2.0.0",
       "bundleIdentifier": "com.hobo.hoboscan",
       "infoPlist": {
         "NSCameraUsageDescription": "To upload images taken by the camera to our api to scan for text, images are automatically deleted once scanned.",
@@ -33,10 +34,12 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 2,
       "package": "com.hobo.hoboscan",
       "permissions": [
         "CAMERA",
-        "READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ]
     }
   }
